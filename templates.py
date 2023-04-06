@@ -188,16 +188,20 @@ return_statment = """\
 {expr}"""
 
 enter_func_call = """\
+# pushing the stack pointer onto the stack
 addiu $sp $sp -4
 sw $ra 4($sp)
 
 # args shit
 {arg_body}
 
+#jumping to function
 jal {func_name}
 """
 
 exit_func_call = """\
+# pop args
+# returning old stack pointer to stack pointer register
 sw 4($sp) $ra
 addiu $sp $sp 4
 """

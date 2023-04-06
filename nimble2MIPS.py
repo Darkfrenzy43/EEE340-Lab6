@@ -57,9 +57,11 @@ class MIPSGenerator(NimbleListener):
         self.mips[ctx] = templates.exit_func_call
 
     def exitFuncCallStmt(self, ctx: NimbleParser.FuncCallStmtContext):
-        pass
+        self.mips[ctx] = self.mips[ctx.funcCall()]
 
     def exitFuncCallExpr(self, ctx: NimbleParser.FuncCallExprContext):
+        # I think we are g here
+        # return will put it on $t0
         pass
     # ---------------------------------------------------------------------------------
     # Provided for you
