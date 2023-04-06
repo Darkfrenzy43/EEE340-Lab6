@@ -186,3 +186,33 @@ move $s0 $v0
 
 return_statment = """\
 {expr}"""
+
+enter_func_def = """\
+{func_name}:
+
+    # Push old $fp address to stack. Make $fp point to just above old $sp slot 
+    addiu   $sp  $sp  -4
+    sw      $fp  4($sp)
+    mv      $fp  $sp
+    
+    # --- Pushing local vars to stack---
+
+    # TO BE DONE
+    # {local_var_body}
+    
+    # --- Body of function. Finish with return value in $t0 ---
+    
+    # TO BE DONE
+    # {func_body}
+    
+    # --- Pop local variables ---
+    
+    #  TO BE DONE
+    
+    
+    # Restore old frame pointer and jump to old return address
+    sw      4($fp) $fp
+    jal     $ra
+    
+
+"""

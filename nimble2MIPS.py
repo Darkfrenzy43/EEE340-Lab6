@@ -36,7 +36,17 @@ class MIPSGenerator(NimbleListener):
     # Functions for lab 6
     # ---------------------------------------------------------------------------------
     def exitFuncDef(self, ctx: NimbleParser.FuncDefContext):
-        pass
+
+        # Extract function name
+        func_name = ctx.ID().getText();
+
+        # Set the MIPS translation. To be updated soon.
+        self.mips[ctx] = templates.enter_func_def.format(
+            func_name = func_name
+            # Add the other parts here
+        )
+
+
 
     def exitParameterDef(self, ctx: NimbleParser.ParameterDefContext):
         pass
