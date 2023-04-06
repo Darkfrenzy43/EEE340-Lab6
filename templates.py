@@ -187,7 +187,6 @@ move $s0 $v0
 return_statment = """\
 {expr}"""
 
-<<<<<<< HEAD
 enter_func_def = """\
 {func_name}:
 
@@ -229,12 +228,9 @@ sw $ra 4($sp)
 
 #jumping to function
 jal {func_name}
-"""
 
-exit_func_call = """\
 # pop args
 # returning old stack pointer to stack pointer register
 sw 4($sp) $ra
 addiu $sp $sp 4
-
 """
