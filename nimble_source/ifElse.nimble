@@ -1,4 +1,16 @@
-
+// ----------------------
+// expected output
+// Is true true...
+// Yes, it's true
+//
+// Is 12 < 13...
+// Yes, it is.
+//
+//
+//
+// Is 15 < 13...
+// No, it isn't
+// ----------------------
 print "Is true true?...\n"
 if true {
     print "Yes, it's true."

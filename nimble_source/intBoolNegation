@@ -1,3 +1,15 @@
+// ----------------------
+// expected output
+// Negative of 10 is -10
+//
+// Testing parens, subtraction and integer negation...
+// 10 + (-3) = 7
+//
+//
+// Testing boolean negation...
+// The evaluated value of !true is false
+// The evaluated value of !!(!false) is true
+// ----------------------
 print "Negative of 10 is "
 print -10
 
