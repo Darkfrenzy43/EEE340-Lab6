@@ -187,6 +187,7 @@ move $s0 $v0
 return_statment = """\
 {expr}"""
 
+<<<<<<< HEAD
 enter_func_def = """\
 {func_name}:
 
@@ -214,5 +215,26 @@ enter_func_def = """\
     sw      4($fp) $fp
     jal     $ra
     
+
+"""
+
+
+enter_func_call = """\
+# pushing the stack pointer onto the stack
+addiu $sp $sp -4
+sw $ra 4($sp)
+
+# args shit
+{arg_body}
+
+#jumping to function
+jal {func_name}
+"""
+
+exit_func_call = """\
+# pop args
+# returning old stack pointer to stack pointer register
+sw 4($sp) $ra
+addiu $sp $sp 4
 
 """
