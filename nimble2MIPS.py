@@ -47,8 +47,14 @@ class MIPSGenerator(NimbleListener):
         else:
             self.mips[ctx] = ""
 
+    def enterFuncCall(self, ctx:NimbleParser.FuncCallContext):
+        self.mips[ctx] = templates.enter_func_call.format(
+            func_name=ctx.ID().getText(),
+            #TODO make args
+            args_body=""
+        )
     def exitFuncCall(self, ctx: NimbleParser.FuncCallContext):
-        pass
+        self.mips[ctx] = templates.exit_func_call
 
     def exitFuncCallStmt(self, ctx: NimbleParser.FuncCallStmtContext):
         pass

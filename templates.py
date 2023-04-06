@@ -186,3 +186,18 @@ move $s0 $v0
 
 return_statment = """\
 {expr}"""
+
+enter_func_call = """\
+addiu $sp $sp -4
+sw $ra 4($sp)
+
+# args shit
+{arg_body}
+
+jal {func_name}
+"""
+
+exit_func_call = """\
+sw 4($sp) $ra
+addiu $sp $sp 4
+"""
