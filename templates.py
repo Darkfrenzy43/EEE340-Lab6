@@ -225,7 +225,7 @@ enter_func_def = """\
 enter_func_call = """\
 # pushing the stack pointer onto the stack
 addiu $sp $sp -4
-sw $ra 4($sp)
+sw $ra -4($sp)
 
 # args shit
 {args_body}
