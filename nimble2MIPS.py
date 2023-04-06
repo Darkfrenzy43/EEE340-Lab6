@@ -7,6 +7,12 @@ or return statements.
 Authors: OCdt Brown & OCdt Velasco
 Date: 01-04-2023
 
+
+NOTES:
+
+    - BE SURE TO MENTION IN LAB 6 REPORT THE EXTRA SLOT STACK IN THE BEGINNING MADE WITH FIRST VAR DEC.
+    EVERYTHING STILL WORKS, BUT THIS WAS AN ACCIDENTAL CREATION.
+
 Instructor version: 2023-03-15
 """
 
@@ -187,7 +193,7 @@ class MIPSGenerator(NimbleListener):
     def exitVarDec(self, ctx: NimbleParser.VarDecContext):
 
         # Reserve a slot in stack for declared local var
-        slot_offset = -4 * (self.current_scope.resolve(ctx.ID().getText()).index + 1)
+        slot_offset = (-4 * (self.current_scope.resolve(ctx.ID().getText()).index + 1))
 
         # Handle if there was assignment
 
@@ -243,7 +249,7 @@ class MIPSGenerator(NimbleListener):
     def exitVariable(self, ctx: NimbleParser.VariableContext):
 
         # Extract info on variable
-        var_offset = -4 * (self.current_scope.resolve(ctx.ID().getText()).index + 1)
+        var_offset = (-4 * (self.current_scope.resolve(ctx.ID().getText()).index + 1))
         self.mips[ctx] = "lw   $t0  {}($fp)".format(var_offset)
 
     def exitMulDiv(self, ctx: NimbleParser.MulDivContext):
