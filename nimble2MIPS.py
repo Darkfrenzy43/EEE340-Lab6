@@ -64,6 +64,7 @@ class MIPSGenerator(NimbleListener):
             args_body=""
         )
 
+
     def exitFuncCallStmt(self, ctx: NimbleParser.FuncCallStmtContext):
         self.mips[ctx] = self.mips[ctx.funcCall()]
 
@@ -79,10 +80,15 @@ class MIPSGenerator(NimbleListener):
         self.current_scope = self.current_scope.child_scope_named('$main')
 
     def exitScript(self, ctx: NimbleParser.ScriptContext):
+
+        # Extracting function definitions
+        func_defs = "".join(self.mips[this_def] for this_def in ctx.funcDef())
+
         self.mips[ctx] = templates.script.format(
             string_literals='\n'.join(f'{label}: .asciiz {string}'
                                       for label, string in self.string_literals.items()),
-            main=self.mips[ctx.main()]
+            main=self.mips[ctx.main()],
+            func_defs = func_defs
         )
 
     def exitMain(self, ctx: NimbleParser.MainContext):
