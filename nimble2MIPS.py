@@ -35,22 +35,25 @@ class MIPSGenerator(NimbleListener):
     # ---------------------------------------------------------------------------------
     # Functions for lab 6
     # ---------------------------------------------------------------------------------
-    def exitFuncDef(self, ctx:NimbleParser.FuncDefContext):
+    def exitFuncDef(self, ctx: NimbleParser.FuncDefContext):
         pass
 
-    def exitParameterDef(self, ctx:NimbleParser.ParameterDefContext):
+    def exitParameterDef(self, ctx: NimbleParser.ParameterDefContext):
         pass
 
-    def exitReturn(self, ctx:NimbleParser.ReturnContext):
+    def exitReturn(self, ctx: NimbleParser.ReturnContext):
+        if ctx.expr() is not None:
+            self.mips[ctx] = self.mips[ctx.expr()]
+        else:
+            self.mips[ctx] = ""
+
+    def exitFuncCall(self, ctx: NimbleParser.FuncCallContext):
         pass
 
-    def exitFuncCall(self, ctx:NimbleParser.FuncCallContext):
+    def exitFuncCallStmt(self, ctx: NimbleParser.FuncCallStmtContext):
         pass
 
-    def exitFuncCallStmt(self, ctx:NimbleParser.FuncCallStmtContext):
-        pass
-
-    def exitFuncCallExpr(self, ctx:NimbleParser.FuncCallExprContext):
+    def exitFuncCallExpr(self, ctx: NimbleParser.FuncCallExprContext):
         pass
     # ---------------------------------------------------------------------------------
     # Provided for you

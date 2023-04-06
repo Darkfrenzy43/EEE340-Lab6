@@ -183,3 +183,6 @@ move $s0 $v0
     # store result of expression in t0
     move $t0 $v0
 """
+
+return_statment = """\
+{expr}"""
