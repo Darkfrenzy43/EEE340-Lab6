@@ -11,6 +11,7 @@ script = """\
 
 true_string: .asciiz "true"
 false_string: .asciiz "false"
+
     
 {string_literals}
 
@@ -24,6 +25,8 @@ choose_false:
 la     $a0 false_string
 end_true_false_string:
 jr     $ra
+
+{func_defs}
 
 main: 
 
@@ -187,7 +190,7 @@ move $s0 $v0
 return_statment = """\
 {expr}"""
 
-<<<<<<< HEAD
+
 enter_func_def = """\
 {func_name}:
 
@@ -199,12 +202,12 @@ enter_func_def = """\
     # --- Pushing local vars to stack---
 
     # TO BE DONE
-    # {local_var_body}
+    # [local_var_body]
     
     # --- Body of function. Finish with return value in $t0 ---
     
     # TO BE DONE
-    # {func_body}
+    # [func_body]
     
     # --- Pop local variables ---
     
@@ -225,7 +228,7 @@ addiu $sp $sp -4
 sw $ra 4($sp)
 
 # args shit
-{arg_body}
+{args_body}
 
 #jumping to function
 jal {func_name}
