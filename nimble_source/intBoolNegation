@@ -1,0 +1,15 @@
+print "Negative of 10 is "
+print -10
+
+print "\n\nTesting parens, subtraction and integer negation...\n"
+print "10 + (-3) = "
+print 10 + (-3)
+print "\n\n\n"
+
+print "Testing boolean negation...\n"
+print "The evaluated value of !true is "
+print !true
+print "\n"
+print "The evaluated value of !!(!false) is "
+print !!(!false)
+print "\n"
