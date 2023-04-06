@@ -33,6 +33,26 @@ class MIPSGenerator(NimbleListener):
         return f'{base}_{self.label_index}'
 
     # ---------------------------------------------------------------------------------
+    # Functions for lab 6
+    # ---------------------------------------------------------------------------------
+    def exitFuncDef(self, ctx:NimbleParser.FuncDefContext):
+        pass
+
+    def exitParameterDef(self, ctx:NimbleParser.ParameterDefContext):
+        pass
+
+    def exitReturn(self, ctx:NimbleParser.ReturnContext):
+        pass
+
+    def exitFuncCall(self, ctx:NimbleParser.FuncCallContext):
+        pass
+
+    def exitFuncCallStmt(self, ctx:NimbleParser.FuncCallStmtContext):
+        pass
+
+    def exitFuncCallExpr(self, ctx:NimbleParser.FuncCallExprContext):
+        pass
+    # ---------------------------------------------------------------------------------
     # Provided for you
     # ---------------------------------------------------------------------------------
 
