@@ -197,7 +197,7 @@ enter_func_def = """\
     # Push old $fp address to stack. Make $fp point to just above old $sp slot 
     addiu   $sp  $sp  -4
     sw      $fp  4($sp)
-    mv      $fp  $sp
+    move    $fp  $sp
     
     # --- Pushing local vars to stack---
 
@@ -215,7 +215,7 @@ enter_func_def = """\
     
     
     # Restore old frame pointer and jump to old return address
-    sw      4($fp) $fp
+    lw      $fp 4($fp)
     jal     $ra
     
 
@@ -235,6 +235,6 @@ jal {func_name}
 
 # pop args
 # returning old stack pointer to stack pointer register
-sw 4($sp) $ra
+lw  $ra  4($sp) 
 addiu $sp $sp 4
 """
