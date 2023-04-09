@@ -56,7 +56,7 @@ class MIPSGenerator(NimbleListener):
         self.mips[ctx] = templates.enter_func_def.format(
             func_name=func_name,
             # Add the other parts here
-            func_body=self.mips[ctx.body()]
+            func_body=(self.mips[ctx.body()])
         )
 
         self.current_scope = self.current_scope.enclosing_scope
@@ -81,8 +81,8 @@ class MIPSGenerator(NimbleListener):
             args_revers_str += "addiu $sp $sp +4\n"
         self.mips[ctx] = templates.enter_func_call.format(
             func_name=ctx.ID().getText(),
-            #TODO make args
-            args_body=args_str
+            args_body=args_str,
+            pop_args_offset = len(func_args) * 4
         )
 
 
@@ -263,8 +263,17 @@ class MIPSGenerator(NimbleListener):
 
     def exitVariable(self, ctx: NimbleParser.VariableContext):
 
-        # Extract info on variable
-        var_offset = (-4 * (self.current_scope.resolve(ctx.ID().getText()).index + 1))
+        # Get the symbol
+        this_symbol = self.current_scope.resolve(ctx.ID().getText());
+
+        # Calculate offset accordingly if the accessed variable is or is not a parameter
+        var_offset = 0;
+        if this_symbol.is_param:
+            var_offset = (4 * (this_symbol.index + 1)) + 4 # TODO - FIX THE EMPTY SPACE
+        else:
+            var_offset = (-4 * (this_symbol.index + 1))
+
+        # Set the translation
         self.mips[ctx] = "lw   $t0  {}($fp)".format(var_offset)
 
     def exitMulDiv(self, ctx: NimbleParser.MulDivContext):
