@@ -58,10 +58,16 @@ class MIPSGenerator(NimbleListener):
             self.mips[ctx] = ""
 
     def exitFuncCall(self, ctx:NimbleParser.FuncCallContext):
+        func_args = [this_expr for this_expr in ctx.expr()]
+        args_str = ""
+        args_revers_str = ""
+        for arg in reversed(func_args):
+            args_str += "addiu $sp $sp -4\n{}\nsw $t0 4($sp)\n".format(self.mips[arg])
+            args_revers_str += "addiu $sp $sp +4\n"
         self.mips[ctx] = templates.enter_func_call.format(
             func_name=ctx.ID().getText(),
             #TODO make args
-            args_body=""
+            args_body=args_str
         )
 
 
