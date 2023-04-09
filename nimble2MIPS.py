@@ -208,7 +208,7 @@ class MIPSGenerator(NimbleListener):
     def exitVarDec(self, ctx: NimbleParser.VarDecContext):
 
         # Reserve a slot in stack for declared local var
-        slot_offset = (-4 * (self.current_scope.resolve(ctx.ID().getText()).index + 1))
+        slot_offset = (-4 * self.current_scope.resolve(ctx.ID().getText()).index) # MODIFIED TO REMOVE EMPTY SPACE
 
         # Handle if there was assignment
 
@@ -225,7 +225,7 @@ class MIPSGenerator(NimbleListener):
 
         # Needs to store the expression in the slot reserved for the variable
         # The slot reserved for the variable is found in the scope
-        slot_offset = -4 * (self.current_scope.resolve(ctx.ID().getText()).index + 1)
+        slot_offset = -4 * self.current_scope.resolve(ctx.ID().getText()).index # CHANGED TO REMOVE EMPTY SPACE
         self.mips[ctx] = templates.assigment.format(
             expr=self.mips[ctx.expr()],
             offset=slot_offset
@@ -271,7 +271,7 @@ class MIPSGenerator(NimbleListener):
         if this_symbol.is_param:
             var_offset = (4 * (this_symbol.index + 1)) + 4 # TODO - FIX THE EMPTY SPACE
         else:
-            var_offset = (-4 * (this_symbol.index + 1))
+            var_offset = (-4 * this_symbol.index) # CHANGED TO REMOVE EMPTY SPACE
 
         # Set the translation
         self.mips[ctx] = "lw   $t0  {}($fp)".format(var_offset)
