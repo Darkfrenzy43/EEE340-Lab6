@@ -24,6 +24,10 @@ func second_func(inNum : Int, returnIt : Bool) -> Int {
 
 }
 
+func third_func(returnIt : Bool) -> Bool {
+    return returnIt
+}
+
 var x : Int = 10
 var y : Int = 12
 
@@ -35,3 +39,5 @@ print "\n"
 print second_func(420, false)
 print "\n"
 print second_func(420, true)
+print "\n"
+print second_func(second_func(568, true), third_func(true))
