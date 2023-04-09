@@ -207,7 +207,7 @@ enter_func_def = """\
     # --- Body of function. Finish with return value in $t0 ---
     
     # TO BE DONE
-    # [func_body]
+    {func_body}
     
     # --- Pop local variables ---
     

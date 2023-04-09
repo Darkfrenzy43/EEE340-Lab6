@@ -35,6 +35,12 @@ class MIPSGenerator(NimbleListener):
     # ---------------------------------------------------------------------------------
     # Functions for lab 6
     # ---------------------------------------------------------------------------------
+    def enterFuncDef(self, ctx: NimbleParser.FuncDefContext):
+
+        # Switch scope to that of the function
+        self.current_scope = self.current_scope.child_scope_named(ctx.ID().getText())
+        # everything else gets handled at the lower levels.
+
     def exitFuncDef(self, ctx: NimbleParser.FuncDefContext):
 
         # Extract function name
@@ -42,9 +48,12 @@ class MIPSGenerator(NimbleListener):
 
         # Set the MIPS translation. To be updated soon.
         self.mips[ctx] = templates.enter_func_def.format(
-            func_name = func_name
+            func_name=func_name,
             # Add the other parts here
+            func_body=self.mips[ctx.body()]
         )
+
+        self.current_scope = self.current_scope.enclosing_scope
 
 
 
@@ -77,7 +86,7 @@ class MIPSGenerator(NimbleListener):
     def exitFuncCallExpr(self, ctx: NimbleParser.FuncCallExprContext):
         # I think we are g here
         # return will put it on $t0
-        pass
+        self.mips[ctx] = self.mips[ctx.funcCall()]
     # ---------------------------------------------------------------------------------
     # Provided for you
     # ---------------------------------------------------------------------------------
