@@ -188,7 +188,15 @@ move $s0 $v0
 """
 
 return_statment = """\
-{expr}"""
+{expr}
+
+# return    
+move    $sp  $fp
+addiu   $sp  $sp  4
+    
+lw      $fp 4($fp)
+jr      $ra
+"""
 
 
 enter_func_def = """\
@@ -209,7 +217,7 @@ enter_func_def = """\
     
     # Restore old frame pointer and jump to old return address
     lw      $fp 4($fp)
-    jal     $ra
+    jr     $ra
     
 
 """

@@ -68,9 +68,13 @@ class MIPSGenerator(NimbleListener):
 
     def exitReturn(self, ctx: NimbleParser.ReturnContext):
         if ctx.expr() is not None:
-            self.mips[ctx] = self.mips[ctx.expr()]
+            self.mips[ctx] = templates.return_statment.format(
+                expr=self.mips[ctx.expr()]
+            )
         else:
-            self.mips[ctx] = ""
+            self.mips[ctx] = templates.return_statment.format(
+                expr=""
+            )
 
     def exitFuncCall(self, ctx:NimbleParser.FuncCallContext):
         func_args = [this_expr for this_expr in ctx.expr()]
