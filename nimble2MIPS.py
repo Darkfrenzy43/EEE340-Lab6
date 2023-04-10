@@ -120,7 +120,8 @@ class MIPSGenerator(NimbleListener):
             func_defs = func_defs,
             stringlen=templates.stringlen.format(
 
-            )
+            ),
+            substring_template = templates.substring_template
         )
 
     def exitMain(self, ctx: NimbleParser.MainContext):

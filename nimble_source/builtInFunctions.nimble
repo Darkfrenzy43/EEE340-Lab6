@@ -4,8 +4,6 @@
 // In the main. Trying out built in nimble functions
 
 var myStr : String = "Some string."
-var myStrLen : Int = stringlength(myStr)
+var mySubStr : String = substring(myStr + "ur mama", 3, 13)
 
-var secondStr : String = substring(myStr, 1 + 3, 2)
-
-print myStrLen
+print mySubStr
