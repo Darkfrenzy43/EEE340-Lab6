@@ -43,9 +43,9 @@ syscall
 add_sub_mul_div_compare = """\
 {expr0}
 addiu  $sp $sp -4 
-sw     $t0 0($sp) 
+sw     $t0 4($sp) 
 {expr1}
-lw     $s1 0($sp) 
+lw     $s1 4($sp) 
 {operation}    $t0 $s1 $t0 
 addiu  $sp $sp 4
 """
@@ -62,6 +62,7 @@ b {startwhile_label}
 if_else_ = """\
 {condition}
 beqz   $t0 {endif_label}
+
 {true_block}
 b {endelse_label}
 {endif_label}:

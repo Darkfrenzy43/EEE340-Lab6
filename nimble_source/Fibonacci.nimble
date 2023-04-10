@@ -1,3 +1,4 @@
+
 func fibonacci(first : Int, second : Int, len : Int){
     if 0 < len {
     print "num ="
@@ -11,4 +12,4 @@ func fibonacci(first : Int, second : Int, len : Int){
     }
 }
 
-print fibonacci(0, 1, 5)
+fibonacci(0, 1, 5) // fibonacii() doesn't return anything
