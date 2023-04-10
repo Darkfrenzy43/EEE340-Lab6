@@ -69,10 +69,8 @@ class MIPSGenerator(NimbleListener):
     def exitReturn(self, ctx: NimbleParser.ReturnContext):
         # checks if current scope is the main scope
         if self.current_scope.enclosing_scope.child_scope_named("$main") == self.current_scope:
-            # look at print to see how system services work
-            # then implement the exit system service
             self.mips[ctx] = "li $v0 10\nsyscall"
-        if ctx.expr() is not None:
+        elif ctx.expr() is not None:
             self.mips[ctx] = templates.return_statment.format(
                 expr=self.mips[ctx.expr()]
             )
