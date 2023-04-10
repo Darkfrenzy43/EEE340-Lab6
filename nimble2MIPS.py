@@ -234,10 +234,15 @@ class MIPSGenerator(NimbleListener):
         )
 
     def exitAssignment(self, ctx: NimbleParser.AssignmentContext):
+        # Get the symbol
+        this_symbol = self.current_scope.resolve(ctx.ID().getText())
 
         # Needs to store the expression in the slot reserved for the variable
         # The slot reserved for the variable is found in the scope
-        slot_offset = -4 * self.current_scope.resolve(ctx.ID().getText()).index # CHANGED TO REMOVE EMPTY SPACE
+        if this_symbol.is_param:
+           slot_offset = (4 * (this_symbol.index + 1)) + 4
+        else:
+            slot_offset = -4 * this_symbol.index
         self.mips[ctx] = templates.assigment.format(
             expr=self.mips[ctx.expr()],
             offset=slot_offset
@@ -279,11 +284,10 @@ class MIPSGenerator(NimbleListener):
         this_symbol = self.current_scope.resolve(ctx.ID().getText());
 
         # Calculate offset accordingly if the accessed variable is or is not a parameter
-        var_offset = 0;
         if this_symbol.is_param:
-            var_offset = (4 * (this_symbol.index + 1)) + 4 # TODO - FIX THE EMPTY SPACE
+            var_offset = (4 * (this_symbol.index + 1)) + 4
         else:
-            var_offset = (-4 * this_symbol.index) # CHANGED TO REMOVE EMPTY SPACE
+            var_offset = (-4 * this_symbol.index)
 
         # Set the translation
         self.mips[ctx] = "lw   $t0  {}($fp)".format(var_offset)
