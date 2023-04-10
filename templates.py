@@ -29,13 +29,7 @@ jr     $ra
 
 # -------- Function Defs for Built-in functions --------
 
-stringlength:
-
-
-
-
-substring:
-
+{substring_template}
 
 
 # ------------------------------------------------------
@@ -239,9 +233,10 @@ enter_func_def = """\
 
 
 enter_func_call = """\
-# --- pushing return address onto the stack ---
+
+# --- Starting Function call: pushing return address onto the stack ---
 addiu $sp $sp -4
-sw $ra 4($sp)       # CHANGED HERE TO POSITIVE 
+sw $ra 4($sp)   
 
 # --- Pushing args onto stack ---
 {args_body}
@@ -256,4 +251,76 @@ addiu $sp $sp {pop_args_offset}
 lw  $ra  4($sp) 
 addiu $sp $sp 4
 
+"""
+
+substring_template = """\
+substring:
+    
+    # Push old $fp address to stack. Make $fp point to just above old $fp slot 
+    addiu   $sp  $sp  -4
+    sw      $fp  4($sp)
+    move    $fp  $sp
+
+    # --- Body: end with $t0 containing pointer to substring ---
+    
+    # store pointer of input string into $s1 
+    lw   $s1  8($fp)
+    
+    # Store <start> and <length> arguments into $s2 and $s3 respectively
+    lw   $s2  12($fp)
+    lw   $s3  16($fp)
+    
+    
+    # Move $s1 right <start> amount of times
+    move_s1:
+    
+        beqz   $s2  finished_moving
+        addiu  $s1  1
+        addiu  $s2  -1
+        j      move_s1
+        
+    finished_moving:
+    
+    # Allocate <length + 1> amount of memory for new string, store returned pointer into $t0 
+    addiu  $s3   1
+    li     $v0   9
+    move   $a0   $s3
+    syscall
+    move   $s0   $v0
+    addiu  $s3   -1
+
+    # Make $s0 point to head of new string as well
+    move   $t0   $s0
+    
+    # Copy <length> amount of characters into new $s0 string
+    copy_characters:
+    
+        # Check if remaining length to copy is 0
+        beqz   $s3  finish_copy_chars
+        
+        # Copy the current char
+        lb      $s4  0($s1)
+        sb      $s4  0($s0)
+        
+        # Move pointers and decrement length
+        addiu   $s0  1
+        addiu   $s1  1
+        addiu   $s3  -1
+        
+        j copy_characters
+    
+    finish_copy_chars:
+    
+        # Put null pointer at end
+        li     $s4  0
+        sb     $s4  0($s0)
+
+    # --- Move $sp to bottom of old $fp slot to pop local variables ---
+    move    $sp  $fp
+    addiu   $sp  $sp  4
+    
+    # Restore old frame pointer and jump to old return address
+    lw      $fp 4($fp)
+    jr      $ra
+    
 """

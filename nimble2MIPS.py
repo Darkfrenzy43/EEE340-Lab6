@@ -116,7 +116,8 @@ class MIPSGenerator(NimbleListener):
             string_literals='\n'.join(f'{label}: .asciiz {string}'
                                       for label, string in self.string_literals.items()),
             main=self.mips[ctx.main()],
-            func_defs = func_defs
+            func_defs = func_defs,
+            substring_template = templates.substring_template
         )
 
     def exitMain(self, ctx: NimbleParser.MainContext):
