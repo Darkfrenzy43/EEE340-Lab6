@@ -82,6 +82,7 @@ class MIPSGenerator(NimbleListener):
     def exitFuncCall(self, ctx:NimbleParser.FuncCallContext):
         func_args = [this_expr for this_expr in ctx.expr()]
         args_str = ""
+        # used to pop arguments off the stack after function is complete
         args_revers_str = ""
         for arg in reversed(func_args):
             args_str += "addiu $sp $sp -4\n{}\nsw $t0 4($sp)\n".format(self.mips[arg])
@@ -116,7 +117,10 @@ class MIPSGenerator(NimbleListener):
             string_literals='\n'.join(f'{label}: .asciiz {string}'
                                       for label, string in self.string_literals.items()),
             main=self.mips[ctx.main()],
-            func_defs = func_defs
+            func_defs = func_defs,
+            stringlen=templates.stringlen.format(
+
+            )
         )
 
     def exitMain(self, ctx: NimbleParser.MainContext):

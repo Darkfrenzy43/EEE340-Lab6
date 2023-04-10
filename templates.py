@@ -30,7 +30,7 @@ jr     $ra
 # -------- Function Defs for Built-in functions --------
 
 stringlength:
-
+{stringlen}
 
 
 
@@ -256,4 +256,11 @@ addiu $sp $sp {pop_args_offset}
 lw  $ra  4($sp) 
 addiu $sp $sp 4
 
+"""
+
+stringlen = """\
+lw $t0 8($fp)
+move $a0 $t0
+li $v0 4
+syscall
 """
