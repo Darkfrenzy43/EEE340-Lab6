@@ -1,2 +1,2 @@
 var x : String = "Hello"
-stringlength(x)
+print stringlength(x)

@@ -29,18 +29,9 @@ jr     $ra
 
 # -------- Function Defs for Built-in functions --------
 
-<<<<<<< HEAD
-stringlength:
 {stringlen}
 
-
-
-substring:
-
-=======
 {substring_template}
->>>>>>> main
-
 
 # ------------------------------------------------------
 
@@ -264,10 +255,34 @@ addiu $sp $sp 4
 """
 
 stringlen = """\
-lw $t0 8($fp)
-move $a0 $t0
-li $v0 4
-syscall
+stringlength:
+    # Push old $fp address to stack. Make $fp point to just above old $fp slot 
+    addiu $sp $sp -4
+    sw $fp 4($sp)
+    move $fp $sp
+
+    # load string into t0
+    lw $s0 8($fp)
+    
+    li $t0 0
+    
+    # counting loop
+    stringlen_loop:
+        lb $s4 0($s0)
+        beqz $s4 stringlen_end
+        
+        addiu $t0 1
+        addiu $s0 1
+        j stringlen_loop
+    stringlen_end:
+    
+    # --- Move $sp to bottom of old $fp slot to pop local variables ---
+    move    $sp  $fp
+    addiu   $sp  $sp  4
+    
+    # Restore old frame pointer and jump to old return address
+    lw      $fp 4($fp)
+    jr     $ra
 """
 
 substring_template = """\
