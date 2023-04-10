@@ -26,6 +26,20 @@ la     $a0 false_string
 end_true_false_string:
 jr     $ra
 
+
+# -------- Function Defs for Built-in functions --------
+
+stringlength:
+
+
+
+
+substring:
+
+
+
+# ------------------------------------------------------
+
 {func_defs}
 
 main: 

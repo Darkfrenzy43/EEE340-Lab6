@@ -24,8 +24,14 @@ class DefineScopesAndSymbols(NimbleListener):
 
     def enterFuncDef(self, ctx: NimbleParser.FuncDefContext):
         func_name = ctx.ID().getText()
+
+
         return_type = PrimitiveType[ctx.TYPE().getText()] if ctx.TYPE() else PrimitiveType.Void
-        if not self.current_scope.resolve_locally(func_name):
+        # -------- MODIFIED FOR BUILT-IN FUNCTIONS --------
+        if func_name == "substring" or func_name == "stringlength":
+            self.error_log.add(ctx, Category.DUPLICATE_NAME, f"Can't redefine built in function {func_name}().")
+        # -------------------------------------------------
+        elif not self.current_scope.resolve_locally(func_name):
             parameter_types = [PrimitiveType[p.TYPE().getText()] for p in ctx.parameterDef()]
             self.current_scope.define(func_name, FunctionType(parameter_types, return_type))
         else:
@@ -152,6 +158,40 @@ class InferTypesAndCheckConstraints(NimbleListener):
 
     def exitFuncCall(self, ctx: NimbleParser.FuncCallContext):
         name = ctx.ID().getText()
+
+        # ------ Modified to accept Built-in Functions ------
+        if name == "stringlength":
+
+            # Checking for correct arguments
+            if self.type_of[ctx.expr(0)] == PrimitiveType.String and ctx.expr(1) is None:
+                self.type_of[ctx] = PrimitiveType.Int;
+            else:
+                self.error_log.add(ctx, Category.INVALID_CALL, f'stringlength() only takes one argument of type '
+                                                                 f'{PrimitiveType.String}.')
+                self.type_of[ctx] = PrimitiveType.ERROR;
+            return;
+
+        elif name == "substring": # WE ARE TO ASSUME THAT ARGUMENT VALUES ARE CORRECT, IE. NOT NEGATIVE, ETC.
+
+            # Checking for correct arguments
+            if ctx.expr(0) is None or ctx.expr(1) is None or ctx.expr(2) is None:
+                self.error_log.add(ctx, Category.INVALID_CALL, f'Call to substring() incorrect. Function signature is ['
+                                                               f'func substring(str : String, start : Int, length : Int'
+                                                               f') -> String].');
+                self.type_of[ctx] = PrimitiveType.ERROR;
+
+            elif (self.type_of[ctx.expr(0)] == PrimitiveType.String and self.type_of[ctx.expr(1)] == PrimitiveType.Int
+                and self.type_of[ctx.expr(2)] == PrimitiveType.Int and ctx.expr(3) is None):
+                self.type_of[ctx] = PrimitiveType.String;
+
+            else:
+                self.error_log.add(ctx, Category.INVALID_CALL, f'Call to substring() incorrect. Function signature is ['
+                                                               f'func substring(str : String, start : Int, length : Int'
+                                                               f') -> String].');
+                self.type_of[ctx] = PrimitiveType.ERROR;
+            return;
+        # ---------------------------------------------------
+
         symbol = self.current_scope.resolve(name)
         if not symbol:
             self.error_log.add(ctx, Category.UNDEFINED_NAME,
