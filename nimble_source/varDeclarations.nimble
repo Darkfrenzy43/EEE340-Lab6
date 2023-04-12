@@ -5,7 +5,6 @@
 // string z is true
 // Int x is 42
 // Bool z is true
-
 // ----------------------
 var y : String = "Some string"
 var x : Int = 12 + 30

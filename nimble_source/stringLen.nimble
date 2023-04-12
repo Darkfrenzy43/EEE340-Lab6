@@ -1,3 +1,9 @@
+// ----------------------
+// expected output
+// 5
+// 11
+// 12
+// ----------------------
 var x : String = "Hello"
 print stringlength(x)
 x = x + " World"

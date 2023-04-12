@@ -1,6 +1,10 @@
+// ----------------------
+// expected output
+// 89
+// ----------------------
 func f() -> Int {
 
-    var f : Int = 69
+    var f : Int = 89
 
     if g(f) {
         return f
