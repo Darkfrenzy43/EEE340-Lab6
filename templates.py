@@ -3,7 +3,7 @@ Templates used by the nimble2MIPS.py module
 
 Authors: OCdt Brown & OCdt Velasco
 
-Date: 01-04-2023
+Date: 13-04-2023
 """
 
 script = """\
@@ -12,7 +12,6 @@ script = """\
 true_string: .asciiz "true"
 false_string: .asciiz "false"
 
-    
 {string_literals}
 
 .text
@@ -25,7 +24,6 @@ choose_false:
 la     $a0 false_string
 end_true_false_string:
 jr     $ra
-
 
 # -------- Function Defs for Built-in functions --------
 
@@ -107,14 +105,12 @@ unary_minus = """\
 neg    $t0, $t0 
 """
 
-# Consider looking at ixor
 bool_neg = """\
 {expr}
 li     $s1 1
 xor    $t0, $s1, $t0
 """
 
-# Include assignment code here after
 var_dec = """\
 addiu  $sp $sp -4
 {val_init}
@@ -127,7 +123,6 @@ sw     $t0 {offset}($fp)
 """
 
 string_cat = """\
-
 # Load registers with string addresses
 {expr0}
 sw $t0 0($sp)
@@ -163,7 +158,6 @@ li $s1 0
 {fin_count}:
     addiu $s1 1
     
-
 # Allocate memory, store return address in $s0 and $s1
 li $v0 9
 move $a0 $s1
@@ -208,7 +202,6 @@ lw      $fp 4($fp)
 jr      $ra
 """
 
-
 enter_func_def = """\
 {func_name}:
 
@@ -228,13 +221,9 @@ enter_func_def = """\
     # Restore old frame pointer and jump to old return address
     lw      $fp 4($fp)
     jr     $ra
-    
-
 """
 
-
 enter_func_call = """\
-
 # --- Starting Function call: pushing return address onto the stack ---
 addiu $sp $sp -4
 sw $ra 4($sp)   
@@ -251,7 +240,6 @@ addiu $sp $sp {pop_args_offset}
 # --- Return restore old address ---
 lw  $ra  4($sp) 
 addiu $sp $sp 4
-
 """
 
 stringlen = """\
@@ -287,7 +275,6 @@ stringlength:
 
 substring_template = """\
 substring:
-    
     # Push old $fp address to stack. Make $fp point to just above old $fp slot 
     addiu   $sp  $sp  -4
     sw      $fp  4($sp)
@@ -301,7 +288,6 @@ substring:
     # Store <start> and <length> arguments into $s2 and $s3 respectively
     lw   $s2  12($fp)
     lw   $s3  16($fp)
-    
     
     # Move $s1 right <start> amount of times
     move_s1:
