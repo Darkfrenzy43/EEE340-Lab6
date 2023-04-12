@@ -1,3 +1,10 @@
+// ----------------------
+// expected output
+// 10
+// 40
+// Hello World
+// ----------------------
+
 func my_func() -> Int{
     var x : Int = 25
     var y : Int = 15

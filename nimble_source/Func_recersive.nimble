@@ -1,3 +1,19 @@
+// ----------------------
+// expected output
+//
+// 10
+// 11
+// 12
+// 13
+// 14
+// 15
+// 16
+// 17
+// 18
+// 19
+// Outside string after recursive function.
+// ----------------------
+
 func my_func(x : Int){
     var y : Int = x - 1
     if x == 0 {
@@ -18,7 +34,7 @@ func add_10(x : Int) -> Int {
     return x + 10
 }
 
-var outside : String = "\nOutside string after recursive function lmao."
+var outside : String = "\nOutside string after recursive function."
 
 my_func(10)
 
