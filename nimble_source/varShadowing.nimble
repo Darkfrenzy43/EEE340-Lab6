@@ -6,6 +6,8 @@
 //
 // Value of original myVar in main: 20
 // ----------------------
+
+
 func f() -> Int {
 
     var myVar : Int = 100   // shadowing a variable from main

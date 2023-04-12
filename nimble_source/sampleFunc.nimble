@@ -2,6 +2,8 @@
 // expected output
 // 10
 // ----------------------
+
+// Just make it empty
 func my_func() {
 }
 
