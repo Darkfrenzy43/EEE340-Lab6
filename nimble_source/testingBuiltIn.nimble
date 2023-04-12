@@ -1,5 +1,11 @@
-
-// Damn we've got a lot of these test cases we should probably organize them soon xD
+// --------------------------
+//  Expected output:
+//
+//  Original string was: "This is a string. Here's a second part to the string."
+//  Length of input string is: 53
+//  New substring is: "is is a string. Here's a s"
+//
+// --------------------------
 
 func doStringStuff(in_str : String, start_ind : Int, str_len : Int) {
 
