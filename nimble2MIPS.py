@@ -4,14 +4,8 @@ listener over a semantically-correct Nimble parse tree, generates equivalent
 MIPS assembly code. Does not consider function definitions, function calls,
 or return statements.
 
-Authors: OCdt Brown & OCdt Velasco
-Date: 01-04-2023
-
-
-NOTES:
-
-    - BE SURE TO MENTION IN LAB 6 REPORT THE EXTRA SLOT STACK IN THE BEGINNING MADE WITH FIRST VAR DEC.
-    EVERYTHING STILL WORKS, BUT THIS WAS AN ACCIDENTAL CREATION.
+Authors: OCdt Brown & OCdt Velasco          yeeee last lab of the course yeeee. lol goodluck finding this Brown.
+Date: 01-04-2023                            im doin the cleanin, so odds are you won't see this lmaoooo.
 
 Instructor version: 2023-03-15
 """
@@ -39,68 +33,70 @@ class MIPSGenerator(NimbleListener):
         return f'{base}_{self.label_index}'
 
     # ---------------------------------------------------------------------------------
-    # Functions for lab 6
+    # Exit and Enter fucntions for lab 6
     # ---------------------------------------------------------------------------------
+
     def enterFuncDef(self, ctx: NimbleParser.FuncDefContext):
 
-        # Switch scope to that of the function
+        # Switch scope to the calling function
         self.current_scope = self.current_scope.child_scope_named(ctx.ID().getText())
-        # everything else gets handled at the lower levels.
+
 
     def exitFuncDef(self, ctx: NimbleParser.FuncDefContext):
 
         # Extract function name
         func_name = ctx.ID().getText();
 
-        # Set the MIPS translation. To be updated soon.
+        # Set the MIPS translation.
         self.mips[ctx] = templates.enter_func_def.format(
             func_name=func_name,
-            # Add the other parts here
             func_body=(self.mips[ctx.body()])
         )
 
+        # Switch scope to enclosing scope
         self.current_scope = self.current_scope.enclosing_scope
 
 
-
-    def exitParameterDef(self, ctx: NimbleParser.ParameterDefContext):
-        pass
-
     def exitReturn(self, ctx: NimbleParser.ReturnContext):
-        # checks if current scope is the main scope
+
+        # First handle if we're calling return in the main scope
         if self.current_scope.enclosing_scope.child_scope_named("$main") == self.current_scope:
             self.mips[ctx] = "li $v0 10\nsyscall"
-        elif ctx.expr() is not None:
-            self.mips[ctx] = templates.return_statment.format(
-                expr=self.mips[ctx.expr()]
-            )
         else:
+
+            # If not in main, handle return accordingly if paired with expression
             self.mips[ctx] = templates.return_statment.format(
-                expr=""
+                expr = self.mips[ctx.expr()] if ctx.expr() is not None else ""
             )
 
+
     def exitFuncCall(self, ctx:NimbleParser.FuncCallContext):
+
+        # Extract function argument expressions
         func_args = [this_expr for this_expr in ctx.expr()]
+
+        # Construct script to push extracted arguments onto stack
         args_str = ""
-        # used to pop arguments off the stack after function is complete
-        args_revers_str = ""
         for arg in reversed(func_args):
             args_str += "addiu $sp $sp -4\n{}\nsw $t0 4($sp)\n".format(self.mips[arg])
-            args_revers_str += "addiu $sp $sp +4\n"
+
+        # Set translation
         self.mips[ctx] = templates.enter_func_call.format(
             func_name=ctx.ID().getText(),
             args_body=args_str,
-            pop_args_offset = len(func_args) * 4
+            pop_args_offset = len(func_args) * 4    # <-- Field for popping arguments off stack at end
         )
 
 
     def exitFuncCallStmt(self, ctx: NimbleParser.FuncCallStmtContext):
         self.mips[ctx] = self.mips[ctx.funcCall()]
 
+
     def exitFuncCallExpr(self, ctx: NimbleParser.FuncCallExprContext):
-        # I think we are g here
-        # return will put it on $t0
+        # If it exists, return statement will put return value in $t0
         self.mips[ctx] = self.mips[ctx.funcCall()]
+
+
     # ---------------------------------------------------------------------------------
     # Provided for you
     # ---------------------------------------------------------------------------------
@@ -113,14 +109,12 @@ class MIPSGenerator(NimbleListener):
         # Extracting function definitions
         func_defs = "".join(self.mips[this_def] for this_def in ctx.funcDef())
 
+        # Added stringlen and substring_template built-in function definitions
         self.mips[ctx] = templates.script.format(
-            string_literals='\n'.join(f'{label}: .asciiz {string}'
-                                      for label, string in self.string_literals.items()),
+            string_literals='\n'.join(f'{label}: .asciiz {string}' for label, string in self.string_literals.items()),
             main=self.mips[ctx.main()],
             func_defs = func_defs,
-            stringlen=templates.stringlen.format(
-
-            ),
+            stringlen=templates.stringlen,
             substring_template = templates.substring_template
         )
 
