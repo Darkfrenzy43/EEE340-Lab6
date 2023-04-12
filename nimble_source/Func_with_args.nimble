@@ -1,7 +1,16 @@
-
+// ----------------------
+// expected output
+// 10
+// hello
+// 68
+// 22
+// 0
+// 580
+// 568
+// ----------------------
 func my_func(one : Int, two : String) {
 
-    var n : Int = 69
+    var n : Int = 58
 
     print one
     print "\n"
@@ -36,8 +45,8 @@ my_func(10, "hello")
 print x + y
 
 print "\n"
-print second_func(420, false)
+print second_func(580, false)
 print "\n"
-print second_func(420, true)
+print second_func(580, true)
 print "\n"
 print second_func(second_func(568, true), third_func(true))
