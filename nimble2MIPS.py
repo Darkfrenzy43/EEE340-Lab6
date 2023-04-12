@@ -73,7 +73,7 @@ class MIPSGenerator(NimbleListener):
             args_str += "addiu $sp $sp -4\n{}\nsw $t0 4($sp)\n".format(self.mips[arg])
 
         # Set translation
-        self.mips[ctx] = templates.enter_func_call.format(
+        self.mips[ctx] = templates.exit_func_call.format(
             func_name=ctx.ID().getText(),
             args_body=args_str,
             pop_args_offset=len(func_args) * 4    # <-- Field for popping arguments off stack at end

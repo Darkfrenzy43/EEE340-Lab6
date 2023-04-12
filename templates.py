@@ -223,7 +223,7 @@ enter_func_def = """\
     jr     $ra
 """
 
-enter_func_call = """\
+exit_func_call = """\
 # --- Starting Function call: pushing return address onto the stack ---
 addiu $sp $sp -4
 sw $ra 4($sp)   
